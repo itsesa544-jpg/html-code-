@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from './components/Header';
 import Sidebar, { FileSystemTree } from './components/Sidebar';
@@ -17,6 +16,11 @@ const App: React.FC = () => {
   const [fileSystem, setFileSystem] = useState<FileSystemTree>({});
   const [processedFiles, setProcessedFiles] = useState<Record<string, ProcessedFile>>({});
   const [activeFile, setActiveFile] = useState<string | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(prev => !prev);
+  };
 
   const addFileToSystem = (path: string, tree: FileSystemTree): FileSystemTree => {
     const parts = path.split('/');
@@ -90,18 +94,23 @@ const App: React.FC = () => {
 
   const handleFileSelect = (path: string) => {
     setActiveFile(path);
+    if (window.innerWidth < 768) {
+      setIsSidebarOpen(false);
+    }
   }
 
   const activeFileData = activeFile ? processedFiles[activeFile] : null;
 
   return (
     <div className="flex flex-col h-screen font-sans text-gray-300 bg-[#0d1117] overflow-hidden">
-      <Header />
+      <Header onToggleSidebar={toggleSidebar} />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar 
             fileSystem={fileSystem} 
             onFileSelect={handleFileSelect}
             activeFile={activeFile}
+            isOpen={isSidebarOpen}
+            onClose={toggleSidebar}
         />
         <main className="flex-1 flex flex-col">
           <EditorView 

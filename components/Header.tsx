@@ -1,16 +1,21 @@
-
 import React from 'react';
 import { MenuIcon, SearchIcon, BellIcon, UserGroupIcon } from './icons/Icons';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  onToggleSidebar: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   return (
     <header className="bg-[#0d1117] border-b border-gray-700/50 flex items-center justify-between px-4 py-2 text-sm shrink-0">
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-2 text-gray-200">
-          <MenuIcon className="h-6 w-6 text-gray-400" />
-          <span className="font-semibold text-base">Code Design Template</span>
+          <button onClick={onToggleSidebar} className="md:hidden">
+            <MenuIcon className="h-6 w-6 text-gray-400" />
+          </button>
+          <span className="font-semibold text-base hidden sm:inline">Code Design Template</span>
         </div>
-        <div className="relative">
+        <div className="relative hidden md:block">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <SearchIcon className="h-4 w-4 text-gray-400" />
           </div>

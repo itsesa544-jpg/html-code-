@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ChevronDownIcon, ChevronRightIcon, FolderIcon, FileIcon, SearchIcon, MenuIcon } from './icons/Icons';
 
@@ -35,7 +34,7 @@ const FileTree: React.FC<FileTreeProps> = ({ tree, onFileSelect, activeFile, lev
             }
         });
         setOpenFolders(initialOpenState);
-    }, []);
+    }, [tree]);
 
 
   const toggleFolder = (name: string) => {
@@ -89,13 +88,20 @@ const FileTree: React.FC<FileTreeProps> = ({ tree, onFileSelect, activeFile, lev
   );
 };
 
+interface SidebarProps {
+    fileSystem: FileSystemTree;
+    onFileSelect: (path: string) => void;
+    activeFile: string | null;
+    isOpen: boolean;
+    onClose: () => void;
+}
 
-const Sidebar: React.FC<{ fileSystem: FileSystemTree; onFileSelect: (path: string) => void; activeFile: string | null; }> = ({ fileSystem, onFileSelect, activeFile }) => {
+const Sidebar: React.FC<SidebarProps> = ({ fileSystem, onFileSelect, activeFile, isOpen, onClose }) => {
   return (
-    <aside className="bg-[#0d1117] w-72 p-2 flex flex-col shrink-0 border-r border-gray-800">
+    <aside className={`bg-[#0d1117] w-72 p-2 flex flex-col shrink-0 border-r border-gray-800 absolute md:relative z-20 h-full transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
       <div className="flex items-center justify-between p-2">
         <h2 className="font-bold text-lg">Codesigns</h2>
-        <button><MenuIcon/></button>
+        <button onClick={onClose} className="md:hidden"><MenuIcon/></button>
       </div>
       <div className="relative my-2">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
